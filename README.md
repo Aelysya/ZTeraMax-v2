@@ -1,31 +1,35 @@
 # ZTeraMax-plugin
+
 This plugins aims to add the Z-Moves, Dynamax and Terastal functionalities to a PSDK fangame
 
 ## Useful links
 
--   [Discord server](https://discord.gg/0noB0gBDd91B8pMk)
--   [Bulbapedia link to Z-Moves](https://bulbapedia.bulbagarden.net/wiki/Z-Move)
--   [Bulbapedia link to Dynamax](https://bulbapedia.bulbagarden.net/wiki/Dynamax)
--   [Bulbapedia link to Terastal](https://bulbapedia.bulbagarden.net/wiki/Terastal_phenomenon)
+- [Discord server](https://discord.gg/0noB0gBDd91B8pMk)
+- [Bulbapedia link to Z-Moves](https://bulbapedia.bulbagarden.net/wiki/Z-Move)
+- [Bulbapedia link to Dynamax](https://bulbapedia.bulbagarden.net/wiki/Dynamax)
+- [Bulbapedia link to Terastal](https://bulbapedia.bulbagarden.net/wiki/Terastal_phenomenon)
 
 ## How to use
 
-First, it is highly recommended that you use a datapack that you can find [here](https://github.com/PokemonWorkshop/GameDataPacks/tree/gen-packs). Many of the data used in this plugin are erroneous in the base data of Studio project, so most of the functionalities will simply not work.
+First, it is highly recommended that you use a datapack that you can find [in this repository](https://github.com/PokemonWorkshop/GameDataPacks/tree/main). Many of the data used in this plugin are erroneous in the base data of Studio project, so most of the functionalities will simply not work.
 
 To use this plugin with your fangame, follow these steps:
-  - Download the latest release from this repository
-  - Unzip the archive,  you should find a file called `ZTeraMax.psdkplug`.
-  - Put this file in the `scripts` folder at the root of your project
-  - Make sure to read all this file, there are some steps that are specific to some mechanics (namely, the Terastal needs you to do some file management, if you don't follow the instructions, you will have crashes)
-  - Go back to your project's root folder, and run the `cmd.bat` executable, a terminal should open up
-  - Enter the command `psdk --util=plugin load` to install the plugin
+
+- Download the latest release from this repository
+- Unzip the archive,  you should find a file called `ZTeraMax.psdkplug`.
+- Put this file in the `scripts` folder at the root of your project
+- Make sure to read all this file, there are some steps that are specific to some mechanics (namely, the Terastal needs you to do some file management, if you don't follow the instructions, you will have crashes)
+- Go back to your project's root folder, and run the `cmd.bat` executable, a terminal should open up
+- Enter the command `psdk --util=plugin load` to install the plugin
 
 **Note on move animations**: The Z-Moves and Max-Moves have no animation yet, you can either do them by yourself if you want, or you can wait for someone else to volunteer to do them. Either way, it is useless to complain about them being missing.
 
 ## How to update the plugin
 
 ### Plugin file update
+
 In the event of an update of the plugin, here are the steps to follow if you already have it installed in your project:
+
 - Go to github [repository](https://github.com/Aelysya/ZTeraMax-plugin)
 - Download the latest release
 - Replace the ZTeraMax.psdkplug file located in your `scripts` folder with the one you downloaded
@@ -33,6 +37,7 @@ In the event of an update of the plugin, here are the steps to follow if you alr
 - Enter the command `psdk --util=plugin load` to update the plugin
 
 ### Configuration file update
+
 In case the configuration file used by the plugin has been updated, follow these steps to avoid overwriting your pre-existing config:
 
 - Go to github [repository](https://github.com/Aelysya/ZTeraMax-plugin)
@@ -42,12 +47,14 @@ In case the configuration file used by the plugin has been updated, follow these
 - Compare the files, if you see new options that are not present in your existing configuration, copy them from the updated version
 
 ## Configuration
+
 You may have a custom Battle UI for your fangame, and if so, you may have changed the move selection buttons. By default, this plugins shortens the moves names so they span a maximum of 15 characters. This is to prevent the veeeeeery long Z-Moves names from going out of the window. If you already have a way to deal with this kind of problems or if the shortening isn't necessary for your game, you can go to the config file `Data/configs/z_tera_max_config.json` and modify the value of `useBuiltinMoveNameSlice` to false.
 
 ### Z-Moves
 
 Z-Moves have been implemented in the plugin to function as close as possible to the official way, you can have a lot of information about them on the [Bulbapedia page for Z-Moves](https://bulbapedia.bulbagarden.net/wiki/Z-Move)
 To use Z-Moves in battle, here's what your players need:
+
 - A Z-tool, which is either a Z-Ring, or a Z-Power Ring
 - Some Z-Crystals
 
@@ -62,6 +69,7 @@ By default **ALL** Pokémon will be generated with a 10% chance to have the Giga
 The 10% value is customizable, you can change the value of the `gigantamaxChance` in the config file `Data/configs/z_tera_max_config.json`.
 
 To create custom Gigantamax Pokémon, you will have to do a small manipulation of the JSON files. Please note that manipulating the JSON files is a very risky thing to do if you don't **precisely** know what you're doing. So, if you want to add your custom Gigantamax Pokémon, follow exactly these steps:
+
 - Open Pokémon Studio
 - Open the database page of the Pokémon you want to give a Gigantamax form to
 - Click on "New form" button in the top right corner, edit anything you want
@@ -72,31 +80,34 @@ To create custom Gigantamax Pokémon, you will have to do a small manipulation o
 - Once your text editor shows you the place where this text is, change the number to 40
 - **DO NOT TOUCH ANYTHING ELSE IN THE FILE UNLESS YOU KNOW EXACTLY WHAT YOU'RE DOING**, you can modify the sprites from Studio though
 
-To give the Gigantamax factor to a Pokémon (or remove it) you will have to script it by yourself. If you want to follow the official way, check this [link](https://bulbapedia.bulbagarden.net/wiki/Master_Dojo#Max_Soup).
+To give the Gigantamax factor to a Pokémon (or remove it) you will have to script it by yourself. If you want to follow the official way, check [this link](https://bulbapedia.bulbagarden.net/wiki/Master_Dojo#Max_Soup).
 The attribute to modify is `gigantamax_factor`, you can do it by calling `$actors[gv[43]].gigantamax_factor = (true|false)` (check the Motisma devices in the Demo's laboratory for more information on how to modify a Pokémon from an event)
 
 In official games, Dynamax is only allowed in some battles such gym and league challenges. If you want to mimic this, a switch is used to allow or not the use of Dynamax in battle. By default the switch number is 113, this is a completely random choice and may conflict with one your switches, if that's the case, you can change the switch number by going in the config file `Data/configs/z_tera_max_config.json` and modifying the `dynamaxEnabledSwitch` field value.
 
-#### Terastal
+### Terastal
+
 Terastal has been implemented in the plugin to function as close as possible to the official way, you can have a lot of information about them on the [Bulbapedia page for Terastal](https://bulbapedia.bulbagarden.net/wiki/Terastal_phenomenon)
 To use the Terastal in battle, your players will need to be given a Tera Orb.
 
 To setup the Terastal properly, you'll have to manipulate a few files. This process can't be automated because the plugin adds a new Type and if you already added custom ones to your project there will be some problems. Here are the steps you need to follow depending on your situation:
 
 If you **DID NOT ADD** any new types to your project:
+
 - Paste the `stellar.json` file in the `Data/Studio/types` folder
 - Paste the files named `types.png`, `types_fr.png`, `types_en.png` and `types_es.png` in the `graphics/interface` folder, when prompted about it, choose to replace all the files
 - Paste the `types_BATTLE.png` file in the `graphics/interface/battle` folder, delete the file named `types.png` in the folder and rename the file you copied to remove the `_BATTLE` part
 - Paste the `100003.csv` file in the `Data/Text/Dialogs` folder, when prompted about it, choose to replace the file
 
 If you **DID ADD** new types to your project, open a text editor, you'll need it to modify some of the files:
+
 - In the `Data/Studio/types` folder, open the file of the last type you added to your project. If youre unsure, try looking for the file that has the highest `id` value. Once you found it, open the `stellar.json` file and change its `id` to be 1 more than the number you found
 - For the files named `types.png`, `types_fr.png`, `types_en.png` and `types_es.png`, since you already added new types to your project you should know how to handle the case of the new Stellar type, just edit your existing resources to add the Stellar sprites
 - For the `types_BATTLE.png` file, same idea as the previous instruction, it just refers to the `types.png` file located in the `graphics/interface/battle` folder
 - A new file named `tera_types.png` has been added in the `graphics/interface/battle` folder, you will have to edit it to add your custom types icons. If you don't have the sprites yet, just leave blank spaces of 16 pixels for each of your types between the Fairy and Stellar types
 - In the `Data/Text/Dialogs` folder, open the `100003.csv`. Open the same file from the plugin and paste the line containing Stellar texts at the end of your file
 
-By default **ALL** Pokémon will be generated with a 10% chance to have an exotic Tera type. An exotic Tera type is defined as being different from the Pokémon's natural types. 
+By default **ALL** Pokémon will be generated with a 10% chance to have an exotic Tera type. An exotic Tera type is defined as being different from the Pokémon's natural types.
 The 10% value is customizable, you can change the value of the `exoticTeraTypeChance` in the config file `Data/configs/z_tera_max_config.json`.
 Note: Ogerpon and Terapagos will always be generated with their Tera type fixed (depends on the mask for Ogerpon, Stellar type for Terapagos).
 
