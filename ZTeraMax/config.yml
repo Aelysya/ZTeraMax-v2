@@ -6,7 +6,7 @@ authors:
   - Lexio
   - Ota
   - Zøzo
-version: 1.0.11
+version: 2.0.0
 deps: []
 psdk_compatibility_script: psdk.rb
 retry_psdk_compatibility_after_plugin_load: false

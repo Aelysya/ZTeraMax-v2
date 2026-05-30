@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: "2.7"
+  TargetRubyVersion: "3.0"
 
 # Make sure we don't get issues with git
 Layout/EndOfLine:
@@ -43,7 +43,7 @@ Style/FrozenStringLiteralComment:
 
 # 120 characters seems better than 80, we don't use small screen anymore
 Layout/LineLength:
-  Max: 150
+  Max: 180
 
 # 10 arguments is fine, most of the time they're used as data feeding
 Metrics/ParameterLists:
