@@ -145,7 +145,45 @@ module Battle
         return Battle::Move[data_move(max_move_symbol).be_method].new(max_move_symbol, @scene, move)
       end
 
+      # Applies the Dynamax marker values (dynamax_level and gigantamax_factor) to a
+      # non-player Pokémon if a matching marker is found in the config.
+      # This bypasses the random values assigned at initialization.
+      # @param pokemon [PFM::PokemonBattler]
+      # @return [void]
+      def apply_marker(pokemon)
+        return if pokemon.from_party?
+
+        marker = marker_for(pokemon)
+        return unless marker
+
+        pokemon.dynamax_level = marker[:dynamaxLevel]
+        pokemon.gigantamax_factor = marker[:isGigantamax]
+      end
+
+      # Checks whether a non-player Pokémon can Dynamax based on a config marker,
+      # without requiring the Dynamax Band in their bag.
+      # @param pokemon [PFM::PokemonBattler]
+      # @return [Boolean]
+      def can_ai_pokemon_dynamax?(pokemon)
+        return false if NO_DYNAMAX_POKEMON.include?(pokemon.db_symbol)
+        return false unless DYNAMAX_TOOLS.any? { |tool| pokemon.bag.contain_item?(tool) }
+        return false if pokemon.can_mega_evolve? || pokemon.mega_evolved? || pokemon.holds_z_crystal?
+        return false if @used_dynamax_tool_bags.include?(pokemon.bag)
+
+        return !marker_for(pokemon).nil?
+      end
+
       private
+
+      # Finds the Dynamax marker in the config that matches the given Pokémon.
+      # @param pokemon [PFM::PokemonBattler]
+      # @return [Array, nil]
+      def marker_for(pokemon)
+        markers = Configs.z_tera_max.dynamax_markers
+        return nil unless markers
+
+        return markers.find { |m| m[:trainerId] == pokemon.party_id && m[:pokemonSymbol].to_s.delete(':').to_sym == pokemon.db_symbol }
+      end
 
       # Function that checks if any action of the player is a Dynamax
       # @return [Boolean] true if any player action is a Dynamax command, false otherwise.

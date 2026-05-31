@@ -5,6 +5,7 @@ module Configs
   KEY_TRANSLATIONS[:exoticTeraTypeChance] = :exotic_tera_type_chance
   KEY_TRANSLATIONS[:terastalEnabledSwitch] = :terastal_enabled_switch
   KEY_TRANSLATIONS[:teraOrbChargeEnabledSwitch] = :tera_orb_charge_enabled_switch
+  KEY_TRANSLATIONS[:dynamaxMarkers] = :dynamax_markers
 
   module Project
     class ZTeraMax
@@ -31,6 +32,10 @@ module Configs
       # Does the Tera Orb needs to be recharged after being used?
       # @return [Boolean]
       attr_accessor :tera_orb_charge_enabled_switch
+
+      # Dynamax markers for AI-controlled trainers.
+      # @return [Array<Array>]
+      attr_accessor :dynamax_markers
     end
   end
 

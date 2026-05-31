@@ -21,7 +21,6 @@ module Battle
           pokemon.bag.remove_item(final_action.item_wrapper.item.db_symbol, 1) if final_action.is_a?(Actions::Item) && !ARGV.include?('ai_sim')
           mega = nil if final_action.is_a?(Actions::Switch)
 
-          p actions
           # If Z-Move moveset was activated but a non-Z-Move action was ultimately chosen, revert.
           pokemon.reset_to_original_moveset if z_actions&.any? && !final_action.is_a?(Actions::ZMove)
 

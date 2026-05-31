@@ -18,7 +18,6 @@ module BattleUI
       # Creates the deflating animation after dynamax expires
       def deflate_animation
         ya = Yuki::Animation
-        animation = ya.send_command_to(self, :zoom=, 1)
 
         size_animation = Yuki::Animation::ScalarAnimation.new(1, self, :zoom=, 2, 1)
 
@@ -27,9 +26,11 @@ module BattleUI
         end
 
         color_animation = Yuki::Animation::ScalarAnimation.new(1, color_updater, :call, 0.5, 0)
-        size_animation.parallel_add(color_animation)
 
-        animation.play_before(size_animation)
+        animation = ya.player(
+          ya.send_command_to(self, :zoom=, 1),
+          ya.parallel(size_animation, color_animation)
+        )
         animation.start
         animation_handler[:deflate] = animation
       end

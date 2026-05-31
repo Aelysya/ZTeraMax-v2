@@ -4,5 +4,13 @@
   "dynamaxEnabledSwitch": 113,
   "exoticTeraTypeChance": 10,
   "terastalEnabledSwitch": 114,
-  "teraOrbChargeEnabledSwitch": 115
+  "teraOrbChargeEnabledSwitch": 115,
+  "dynamaxMarkers": [
+    {
+      "trainerId": 0,
+      "pokemonSymbol": ":charizard",
+      "dynamaxLevel": 10,
+      "isGigantamax": true
+    }
+  ]
 }

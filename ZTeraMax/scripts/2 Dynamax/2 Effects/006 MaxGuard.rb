@@ -7,7 +7,6 @@ module Battle
       # @param move [Battle::Move]
       # @return [Boolean] if the target is evading the move
       def on_move_prevention_target(user, target, move)
-        p move.overwhelms_protect?
         return super unless move.overwhelms_protect?
 
         # Override the protect effect allowing overwhelming moves to go through
