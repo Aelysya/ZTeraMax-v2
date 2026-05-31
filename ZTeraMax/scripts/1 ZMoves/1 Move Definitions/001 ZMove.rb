@@ -14,7 +14,7 @@ module Battle
 
       # Checks if the move overwhelms protected targets and does some damage through protect-like effects
       # @return [Boolean] If the move is overwhelming
-      def overwhelm_protect?
+      def overwhelms_protect?
         return true
       end
     end

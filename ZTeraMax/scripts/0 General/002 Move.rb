@@ -4,6 +4,9 @@ module Battle
       # If the move is a Z-Move
       # @return [Boolean]
       attr_accessor :is_z
+      # if the move is a Max-Move
+      # @return [Boolean]
+      attr_accessor :is_max
 
       # Get the move name sliced to fit in the move button
       # @return [String]
@@ -27,6 +30,7 @@ module Battle
       def initialize(db_symbol, pp, ppmax, scene)
         super
         @is_z = false
+        @is_max = false
       end
 
       # Return the name of the skill

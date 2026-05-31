@@ -3,11 +3,15 @@ module Battle
     # Logic for Dynamax
     class Dynamax
       # List of tools that allow Dynamax
+      # @return [Array<Symbol>]
       DYNAMAX_TOOLS = %i[dynamax_band]
 
+      # List of Pokémon that cannot Dynamax
+      # @return [Array<Symbol>]
       NO_DYNAMAX_POKEMON = %i[zacian zamazenta]
 
       # List of Max Moves by type
+      # @return [Hash{Symbol => Symbol}]
       MAX_MOVES = {
         normal: :max_strike,
         fighting: :max_knuckle,
@@ -30,8 +34,9 @@ module Battle
       }
 
       # List of signature Max Moves by species and type
+      # @return [Hash{Symbol => {type: Symbol, move: Symbol}}]
       SIGNATURE_MAX_MOVES = {
-        venusaur: { type: :grass, move: :gmax_vine_lach },
+        venusaur: { type: :grass, move: :gmax_vine_lash },
         charizard: { type: :fire, move: :gmax_wildfire },
         blastoise: { type: :water, move: :gmax_cannonade },
         butterfree: { type: :bug, move: :gmax_befuddle },
@@ -71,6 +76,13 @@ module Battle
         @used_dynamax_tool_bags = []
       end
 
+      # Marks the given Pokémon's trainer as having used the Dynamax.
+      # @param pokemon [Pokemon] The Pokémon that has used the Dynamax.
+      # @return [void]
+      def mark_as_dynamax_used(pokemon)
+        @used_dynamax_tool_bags << pokemon.bag
+      end
+
       # Determines if a given Pokémon can Dynamax.
       # @param pokemon [Pokemon] The Pokémon to check.
       # @return [Boolean] True if the Pokémon can Dynamax, false otherwise.
@@ -94,7 +106,7 @@ module Battle
           pokemon.original_moveset[i] = Battle::Move[move.be_method].new(move.db_symbol, move.pp, move.ppmax, @scene)
 
           if move.status?
-            pokemon.moveset[i] = Battle::Move[:s_max_guard].new(:max_guard, move.pp, move.ppmax, @scene)
+            pokemon.moveset[i] = Battle::Move[:s_max_guard].new(:max_guard, @scene, move)
             pokemon.moveset[i].is_max = true
           else
             pokemon.moveset[i] = replace_with_max_move(pokemon, move)
@@ -133,13 +145,6 @@ module Battle
         return Battle::Move[data_move(max_move_symbol).be_method].new(max_move_symbol, @scene, move)
       end
 
-      # Marks the given Pokémon's trainer as having used the Dynamax.
-      # @param pokemon [Pokemon] The Pokémon that has used the Dynamax.
-      # @return [void]
-      def mark_as_dynamax_used(pokemon)
-        @used_dynamax_tool_bags << pokemon.bag
-      end
-
       private
 
       # Function that checks if any action of the player is a Dynamax
@@ -149,16 +154,16 @@ module Battle
       end
     end
 
-    # class BattleEndHandler < ChangeHandlerBase
-    #   module DynamaxPlugin
-    #     # Handle form recalibration after battle
-    #     # @param players_creatures [Array<PFM::PokemonBattler>]
-    #     def handle_form_recalibration(players_creatures)
-    #       players_creatures.each(&:undynamax)
-    #       super
-    #     end
-    #   end
-    #   prepend DynamaxPlugin
-    # end
+    class BattleEndHandler < ChangeHandlerBase
+      module ZTeraMaxPlugin
+        # Handle form recalibration after battle
+        # @param players_creatures [Array<PFM::PokemonBattler>]
+        def handle_form_recalibration(players_creatures)
+          players_creatures.each(&:undynamax)
+          super
+        end
+      end
+      prepend ZTeraMaxPlugin
+    end
   end
 end

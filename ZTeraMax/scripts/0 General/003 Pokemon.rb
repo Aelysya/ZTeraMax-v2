@@ -1,6 +1,32 @@
 module PFM
   class Pokemon
     module ZTeraMaxPlugin
+      # Create a new Pokemon with specific parameters
+      # @param id [Integer, Symbol] ID of the Pokemon in the database
+      # @param level [Integer] level of the Pokemon
+      # @param force_shiny [Boolean] if the Pokemon have 100% chance to be shiny
+      # @param no_shiny [Boolean] if the Pokemon have 0% chance to be shiny (override force_shiny)
+      # @param form [Integer] Form index of the Pokemon (-1 = automatic generation)
+      # @param opts [Hash] Hash describing optional value you want to assign to the Pokemon
+      # @option opts [Integer] :dynamax_level Dynamax level of the Pokemon
+      # @option opts [Boolean] :gigantamax If the Pokemon has the Gigantamax factor
+      def initialize(id, level, force_shiny = false, no_shiny = false, form = -1, opts = {})
+        super
+        dynamax_initialize(opts)
+      end
+
+      # Method that initialize the Dynamax values
+      # @param opts [Hash] Hash describing optional value you want to assign to the Pokemon
+      def dynamax_initialize(opts)
+        @dynamax_level = opts[:dynamax_level] || 0
+
+        @gigantamax_factor = if db_symbol == :eternatus
+                               true
+                             else
+                               opts[:gigantamax] || rand(100) < Configs.z_tera_max.gigantamax_chance # 10% by default
+                             end
+      end
+
       # Check if the Pokemon can mega evolve
       # @return [Integer, false] form index if the Pokemon can mega evolve, false otherwise
       # @note item-less Mega Evolution can't Mega if they hold a Z-Crystal (Rayquaza)
@@ -26,6 +52,12 @@ module PFM
                            icium_z fightinium_z poisonium_z groundium_z flyinium_z
                            psychium_z buginium_z rockium_z ghostium_z dragonium_z
                            steelium_z darkinium_z fairium_z]
+
+    # @return [Integer] Dynamax level of the Pokémon between 0 and 10
+    attr_accessor :dynamax_level
+
+    # @return [Boolean] If the Pokémon has the Gigantamax factor
+    attr_accessor :gigantamax_factor
 
     # Reset the Pokémon's moveset to its original state
     # @param pokemon [Pokemon] The Pokémon whose moveset is to be updated.
