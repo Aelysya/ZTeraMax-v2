@@ -177,12 +177,13 @@ module Battle
 
       # Finds the Dynamax marker in the config that matches the given Pokémon.
       # @param pokemon [PFM::PokemonBattler]
-      # @return [Array, nil]
+      # @return [Hash, nil]
       def marker_for(pokemon)
         markers = Configs.z_tera_max.dynamax_markers
         return nil unless markers
 
-        return markers.find { |m| m[:trainerId] == pokemon.party_id && m[:pokemonSymbol].to_s.delete(':').to_sym == pokemon.db_symbol }
+        trainer_db_id = @scene.battle_info.trainer_db_ids&.dig(pokemon.bank, pokemon.party_id)
+        return markers.find { |m| m[:trainerId] == trainer_db_id && m[:pokemonSymbol].to_s.to_sym == pokemon.db_symbol }
       end
 
       # Function that checks if any action of the player is a Dynamax
@@ -190,18 +191,6 @@ module Battle
       def any_dynamax_player_action?
         @scene.player_actions.flatten.any? { |action| action.is_a?(Actions::Dynamax) }
       end
-    end
-
-    class BattleEndHandler < ChangeHandlerBase
-      module ZTeraMaxPlugin
-        # Handle form recalibration after battle
-        # @param players_creatures [Array<PFM::PokemonBattler>]
-        def handle_form_recalibration(players_creatures)
-          players_creatures.each(&:undynamax)
-          super
-        end
-      end
-      prepend ZTeraMaxPlugin
     end
   end
 end

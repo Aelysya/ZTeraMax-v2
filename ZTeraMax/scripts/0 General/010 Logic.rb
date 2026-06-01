@@ -1,5 +1,32 @@
 module Battle
   class Logic
+    # Extend BattleInfo to track each trainer's Studio database ID, indexed by [bank][party_id].
+    # This allows config markers to reference trainers by their Studio ID rather than
+    # the battle-relative party_id (which is always 0 for single-trainer battles).
+    class BattleInfo
+      # @return [Array<Array<Integer>>] trainer database IDs indexed by [bank][party_id]
+      attr_accessor :trainer_db_ids
+
+      module ZTeraMaxPlugin
+        def initialize(hash = {})
+          super
+          @trainer_db_ids = [[], []]
+        end
+      end
+      prepend ZTeraMaxPlugin
+
+      class << self
+        module ZTeraMaxPlugin
+          def add_trainer(battle_info, bank, id_trainer)
+            party_idx = (battle_info.parties[bank] || []).size
+            super
+            (battle_info.trainer_db_ids[bank] ||= [])[party_idx] = id_trainer
+          end
+        end
+        prepend ZTeraMaxPlugin
+      end
+    end
+
     module ZTeraMaxPlugin
       # Get the ZMove helper
       # @return [ZMoves]
@@ -17,6 +44,14 @@ module Battle
         @z_move = ZMoves.new(scene)
         @dynamax = Dynamax.new(scene)
         @terastal = Terastal.new(scene)
+        super
+      end
+
+      # Handle form recalibration after battle
+      # @param players_creatures [Array<PFM::PokemonBattler>]
+      def handle_form_recalibration(players_creatures)
+        players_creatures.each(&:undynamax)
+        players_creatures.each { |pokemon| pokemon.terastallized = false }
         super
       end
     end

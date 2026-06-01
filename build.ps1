@@ -4,6 +4,8 @@ $filesToCopy = @(
     "ZTeraMax-AddedFiles/button_dynamax.png",
     "ZTeraMax-AddedFiles/button_zmove_activated.png",
     "ZTeraMax-AddedFiles/button_zmove.png",
+    "ZTeraMax-AddedFiles/button_terastal_activated.png",
+    "ZTeraMax-AddedFiles/button_terastal.png",
     "ZTeraMax-AddedFiles/gigantamax_icon.png",
     "ZTeraMax-AddedFiles/z_tera_max_config.json"
 )
@@ -14,6 +16,8 @@ $destinationPaths = @(
     "../graphics/interface/battle/button_dynamax.png",
     "../graphics/interface/battle/button_zmove_activated.png",
     "../graphics/interface/battle/button_zmove.png",
+    "../graphics/interface/battle/button_terastal_activated.png",
+    "../graphics/interface/battle/button_terastal.png",
     "../graphics/interface/gigantamax_icon.png",
     "../Data/configs/z_tera_max_config.json"
 )

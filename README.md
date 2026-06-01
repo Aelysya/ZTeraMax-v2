@@ -22,33 +22,20 @@ To use this plugin with your fangame, follow these steps:
 - Go back to your project's root folder, and run the `cmd.bat` executable, a terminal should open up
 - Enter the command `psdk --util=plugin load` to install the plugin
 
-**Note on move animations**: The Z-Moves and Max-Moves have no animation yet, you can either do them by yourself if you want, or you can wait for someone else to volunteer to do them. Either way, it is useless to complain about them being missing.
-
 ## How to update the plugin
 
 ### Plugin file update
 
 In the event of an update of the plugin, here are the steps to follow if you already have it installed in your project:
 
-- Go to github [repository](https://github.com/Aelysya/ZTeraMax-plugin)
 - Download the latest release
-- Replace the ZTeraMax.psdkplug file located in your `scripts` folder with the one you downloaded
+- Replace the `ZTeraMax.psdkplug` file located in your `scripts` folder with the one you downloaded
 - Go back to your project's root folder and run the `cmd.bat` executable, a terminal should open up
 - Enter the command `psdk --util=plugin load` to update the plugin
 
-### Configuration file update
-
-In case the configuration file used by the plugin has been updated, follow these steps to avoid overwriting your pre-existing config:
-
-- Go to github [repository](https://github.com/Aelysya/ZTeraMax-plugin)
-- Download the latest release
-- Open the `z_tera_max_config.json` file in a text editor (like VS Code) and keep the window open
-- In your project's folder go in the `Data/configs` folder and open the existing `z_tera_max_config.json` file in your text editor
-- Compare the files, if you see new options that are not present in your existing configuration, copy them from the updated version
-
 ## Configuration
 
-You may have a custom Battle UI for your fangame, and if so, you may have changed the move selection buttons. By default, this plugins shortens the moves names so they span a maximum of 15 characters. This is to prevent the veeeeeery long Z-Moves names from going out of the window. If you already have a way to deal with this kind of problems or if the shortening isn't necessary for your game, you can go to the config file `Data/configs/z_tera_max_config.json` and modify the value of `useBuiltinMoveNameSlice` to false.
+You may have a custom Battle UI for your fangame, and if so, you may have changed the move selection buttons. By default, this plugins shortens the moves names so they span a maximum of 15 characters. This is to prevent the veeery long Z-Moves names from going out of the window. If you already have a way to deal with this kind of problems or if the shortening isn't necessary for your game, you can go to the config file `Data/configs/z_tera_max_config.json` and modify the value of `useBuiltinMoveNameSlice` to false.
 
 ### Z-Moves
 
@@ -85,6 +72,8 @@ The attribute to modify is `gigantamax_factor`, you can do it by calling `$actor
 
 In official games, Dynamax is only allowed in some battles such gym and league challenges. If you want to mimic this, a switch is used to allow or not the use of Dynamax in battle. By default the switch number is 113, this is a completely random choice and may conflict with one your switches, if that's the case, you can change the switch number by going in the config file `Data/configs/z_tera_max_config.json` and modifying the `dynamaxEnabledSwitch` field value.
 
+For an AI trainer to use Dynamax, you need to add an entry to the `dynamaxMarkers` field in the configuration file. The internal fields have fairly self-explanatory names, so you shouldn't have too much trouble filling them out. As soon as the trainer sends out a Pokémon with a db_symbol that matches one of its markers, it will Dynamax and be able to use Max Moves.
+
 ### Terastal
 
 Terastal has been implemented in the plugin to function as close as possible to the official way, you can have a lot of information about them on the [Bulbapedia page for Terastal](https://bulbapedia.bulbagarden.net/wiki/Terastal_phenomenon)
@@ -103,7 +92,7 @@ If you **DID ADD** new types to your project, open a text editor, you'll need it
 
 - In the `Data/Studio/types` folder, open the file of the last type you added to your project. If youre unsure, try looking for the file that has the highest `id` value. Once you found it, open the `stellar.json` file and change its `id` to be 1 more than the number you found
 - For the files named `types.png`, `types_fr.png`, `types_en.png` and `types_es.png`, since you already added new types to your project you should know how to handle the case of the new Stellar type, just edit your existing resources to add the Stellar sprites
-- For the `types_BATTLE.png` file, same idea as the previous instruction, it just refers to the `types.png` file located in the `graphics/interface/battle` folder
+- For the `types_BATTLE.png` file, same idea as the previous instruction, it just refers to the `types.png` file located in the `graphics/interface/battle` folder, don't forget to rename it to `types.png` once you copied it
 - A new file named `tera_types.png` has been added in the `graphics/interface/battle` folder, you will have to edit it to add your custom types icons. If you don't have the sprites yet, just leave blank spaces of 16 pixels for each of your types between the Fairy and Stellar types
 - In the `Data/Text/Dialogs` folder, open the `100003.csv`. Open the same file from the plugin and paste the line containing Stellar texts at the end of your file
 
@@ -115,7 +104,9 @@ In official games, Terastal is allowed in every battle, but since the plugin als
 
 Another switch number can be configured with the `teraOrbChargeEnabledSwitch` field in the `Data/configs/z_tera_max_config.json` file. It allows you to make it so the Terastal is not limited to one use every Pokémon Center visit. The way it works with the plugin is that after a fight, if the need to recharge is enabled, the switch enabling the Terastal (`terastalEnabledSwitch`) will be set to false. If you want to mimic the way official games work, you can just add a command in your Pokémon Centers to re-set the switch to true when you visit one. In official games the Tera Orb automatically recharges after a battle when you are in some locations or when you capture Terapagos, you can mimic this behaviours with the `teraOrbChargeEnabledSwitch` switch value by setting it to false.
 
-To give modify the Tera type of a Pokémon you will have to script it by yourself. If you want to follow the official way, you 'll need to setup an NPC asking for 50 Tera Shards of a certain type. You can do it by calling `$actors[gv[43]].change_tera_type(:new_type)` (check the Motisma devices in the Demo's laboratory for more information on how to modify a Pokémon from an event)
+To give modify the Tera type of a Pokémon you will have to script it by yourself. If you want to follow the official way, you 'll need to setup an NPC asking for 50 Tera Shards of a certain type. You can do it by calling `$actors[gv[43]].change_tera_type(:new_type)` (check the Motisma devices in the Demo's laboratory for more information on how to modify a Pokémon from an event).
+
+For an AI trainer to use Terastal, you need to add an entry to the `terastalMarkers` field in the configuration file. The internal fields have fairly self-explanatory names, so you shouldn't have too much trouble filling them out. As soon as the trainer sends out a Pokémon with a db_symbol that matches one of its markers, it will Terastallize.
 
 ## Credits
 

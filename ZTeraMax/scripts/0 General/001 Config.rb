@@ -6,6 +6,7 @@ module Configs
   KEY_TRANSLATIONS[:terastalEnabledSwitch] = :terastal_enabled_switch
   KEY_TRANSLATIONS[:teraOrbChargeEnabledSwitch] = :tera_orb_charge_enabled_switch
   KEY_TRANSLATIONS[:dynamaxMarkers] = :dynamax_markers
+  KEY_TRANSLATIONS[:terastalMarkers] = :terastal_markers
 
   module Project
     class ZTeraMax
@@ -34,8 +35,12 @@ module Configs
       attr_accessor :tera_orb_charge_enabled_switch
 
       # Dynamax markers for AI-controlled trainers.
-      # @return [Array<Array>]
+      # @return [Array<Hash>]
       attr_accessor :dynamax_markers
+
+      # Terastal markers for AI-controlled trainers.
+      # @return [Array<Hash>]
+      attr_accessor :terastal_markers
     end
   end
 

@@ -8,9 +8,16 @@
   "dynamaxMarkers": [
     {
       "trainerId": 0,
-      "pokemonSymbol": ":charizard",
+      "pokemonSymbol": "charizard",
       "dynamaxLevel": 10,
       "isGigantamax": true
+    }
+  ],
+  "terastalMarkers": [
+    {
+      "trainerId": 2,
+      "pokemonSymbol": "gastrodon",
+      "teraType": "stellar"
     }
   ]
 }

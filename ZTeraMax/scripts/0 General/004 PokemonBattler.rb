@@ -7,13 +7,17 @@ module PFM
       attr_accessor :dynamaxed
       # @return [Integer, Boolean] Holds the original form of the Pokémon when it is Gigantamaxed, false when not Gigantamaxed
       attr_accessor :gigantamaxed
+      # @return [Boolean] If the Pokémon is Terastallized
+      attr_accessor :terastallized
+      # @return [Array<Integer>] List of types that have been Stellar-boosted
+      attr_accessor :stellar_boosted_types
 
       # List of moves that should ignore abilities
       # @return [Array<Symbol>]
       MOVES_IGNORING_ABILITIES.concat(%i[searing_sunraze_smash menacing_moonraze_maelstrom light_that_burns_the_sky
                                          gmax_drum_solo gmax_fireball gmax_hydrosnipe])
 
-      COPIED_PROPERTIES.concat(%i[@dynamax_level @gigantamax_factor])
+      COPIED_PROPERTIES.concat(%i[@dynamax_level @gigantamax_factor @tera_type])
 
       # Create a new PokemonBattler
       # @param original [PFM::Pokemon] original Pokemon (protected during the battle)
@@ -24,6 +28,8 @@ module PFM
         @original_moveset = []
         @dynamaxed = false
         @gigantamaxed = false
+        @terastallized = false
+        @stellar_boosted_types = []
       end
 
       # Check if the Pokemon can Gigantamax

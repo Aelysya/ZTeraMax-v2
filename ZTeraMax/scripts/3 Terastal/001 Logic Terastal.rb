@@ -30,7 +30,43 @@ module Battle
         @used_terastal_tool_bags << pokemon.bag
       end
 
+      # Checks whether a non-player Pokémon can Terastallize based on a config marker,
+      # without requiring the Tera Orb in their bag.
+      # @param pokemon [PFM::PokemonBattler]
+      # @return [Boolean]
+      def can_ai_pokemon_terastal?(pokemon)
+        return false unless TERASTAL_TOOLS.any? { |tool| pokemon.bag.contain_item?(tool) }
+        return false if pokemon.can_mega_evolve? || pokemon.mega_evolved? || pokemon.holds_z_crystal?
+        return false if @used_terastal_tool_bags.include?(pokemon.bag)
+
+        return !marker_for_terastal(pokemon).nil?
+      end
+
+      # Applies the Terastal marker tera type override (if present) to a non-player Pokémon.
+      # @param pokemon [PFM::PokemonBattler]
+      # @return [void]
+      def apply_terastal_marker(pokemon)
+        return if pokemon.from_party?
+
+        marker = marker_for_terastal(pokemon)
+        return unless marker
+
+        tera_type_sym = marker[:teraType].to_s.to_sym
+        pokemon.change_tera_type(tera_type_sym) if tera_type_sym
+      end
+
       private
+
+      # Finds the Terastal marker in the config that matches the given Pokémon.
+      # @param pokemon [PFM::PokemonBattler]
+      # @return [Hash, nil]
+      def marker_for_terastal(pokemon)
+        markers = Configs.z_tera_max.terastal_markers
+        return nil unless markers
+
+        trainer_db_id = @scene.battle_info.trainer_db_ids&.dig(pokemon.bank, pokemon.party_id)
+        return markers.find { |m| m[:trainerId] == trainer_db_id && m[:pokemonSymbol].to_s.delete(':').to_sym == pokemon.db_symbol }
+      end
 
       # Function that checks if any action of the player is a Terastal
       # @return [Boolean] true if any player action is an Terastal command, false otherwise.
@@ -39,38 +75,25 @@ module Battle
       end
     end
 
-    # class BattleEndHandler < ChangeHandlerBase
-    #   module TerastalPlugin
-    #     # Handle form recalibration after battle
-    #     # @param players_creatures [Array<PFM::PokemonBattler>]
-    #     def handle_form_recalibration(players_creatures)
-    #       players_creatures.each { |pokemon| pokemon.terastallized = false }
-    #       super
-    #     end
-    #   end
-    #   prepend TerastalPlugin
-    # end
+    class EndTurnHandler
+      module ZTeraMaxPlugin
+        def process_events
+          super
+          process_untera_end_turn_event
+          @logic.delete_dead_effects
+        end
 
-    # class EndTurnHandler
-    #   module TerastalPlugin
+        private
 
-    #     def process_events
-    #       super
-    #       process_untera_end_turn_event
-    #       @logic.delete_dead_effects
-    #     end
+        def process_untera_end_turn_event
+          @logic.all_battlers do |battler|
+            next unless battler.dead? && battler.terastallized
 
-    #     private
-
-    #     def process_untera_end_turn_event
-    #       @logic.all_battlers do |battler|
-    #         next unless battler.dead? && battler.terastallized
-
-    #         battler.terastallized = false
-    #       end
-    #     end
-    #   end
-    #   prepend TerastalPlugin
-    # end
+            battler.terastallized = false
+          end
+        end
+      end
+      prepend ZTeraMaxPlugin
+    end
   end
 end

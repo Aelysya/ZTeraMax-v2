@@ -1,6 +1,10 @@
 module PFM
   class Pokemon
     module ZTeraMaxPlugin
+      # List of species with a fixed Tera type
+      # @return [Array<Symbol>]
+      FIXED_TERA_TYPE_SPECIES = %i[ogerpon terapagos]
+
       # Create a new Pokemon with specific parameters
       # @param id [Integer, Symbol] ID of the Pokemon in the database
       # @param level [Integer] level of the Pokemon
@@ -10,9 +14,11 @@ module PFM
       # @param opts [Hash] Hash describing optional value you want to assign to the Pokemon
       # @option opts [Integer] :dynamax_level Dynamax level of the Pokemon
       # @option opts [Boolean] :gigantamax If the Pokemon has the Gigantamax factor
+      # @option opts [Symbol] :tera_type Tera type of the Pokemon
       def initialize(id, level, force_shiny = false, no_shiny = false, form = -1, opts = {})
         super
         dynamax_initialize(opts)
+        terastal_initialize(opts)
       end
 
       # Method that initialize the Dynamax values
@@ -25,6 +31,48 @@ module PFM
                              else
                                opts[:gigantamax] || rand(100) < Configs.z_tera_max.gigantamax_chance # 10% by default
                              end
+      end
+
+      # Method that initialize the Terastal values
+      # @param opts [Hash] Hash describing optional value you want to assign to the Pokemon
+      def terastal_initialize(opts)
+        return handle_fixed_tera_type(opts) if FIXED_TERA_TYPE_SPECIES.include?(db_symbol)
+
+        return @tera_type = data_type(opts[:tera_type]).id if opts[:tera_type]
+        return @tera_type = rand(1..each_data_type.size) if rand(100) < Configs.z_tera_max.exotic_tera_type_chance # 10% by default
+        return @tera_type = type1 if type2 == 0
+
+        @tera_type = [type1, type2].sample
+      end
+
+      # Change the Tera type of the Pokemon
+      # @param db_symbol [Symbol] db_symbol of the type
+      def change_tera_type(type)
+        @tera_type = data_type(type).id
+      end
+
+      # Get the Tera type of the Pokemon
+      # @return [Integer]
+      def tera_type
+        return @tera_type || data_type(:normal).id
+      end
+
+      # Handle the fixed Tera type of Ogerpon and Terapagos
+      # @param opts [Hash] Hash describing optional value you want to assign to the Pokemon
+      def handle_fixed_tera_type(opts)
+        return @tera_type = data_type(:stellar).id if db_symbol == :terapagos
+        return @tera_type = data_type(:grass).id unless opts[:item]
+
+        case opts[:item]
+        when :wellspring_mask
+          @tera_type = data_type(:water).id
+        when :hearthflame_mask
+          @tera_type = data_type(:fire).id
+        when :cornerstone_mask
+          @tera_type = data_type(:rock).id
+        else
+          @tera_type = data_type(:grass).id
+        end
       end
 
       # Check if the Pokemon can mega evolve
