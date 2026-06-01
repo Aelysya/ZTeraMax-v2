@@ -46,14 +46,6 @@ module Battle
         @terastal = Terastal.new(scene)
         super
       end
-
-      # Handle form recalibration after battle
-      # @param players_creatures [Array<PFM::PokemonBattler>]
-      def handle_form_recalibration(players_creatures)
-        players_creatures.each(&:undynamax)
-        players_creatures.each { |pokemon| pokemon.terastallized = false }
-        super
-      end
     end
     prepend ZTeraMaxPlugin
 
@@ -66,6 +58,19 @@ module Battle
       def any_mega_player_action?
         @scene.player_actions.flatten.any? { |actions| actions.is_a?(Actions::Mega) }
       end
+    end
+
+    class BattleEndHandler < ChangeHandlerBase
+      module ZTeraMaxPlugin
+        # Handle form recalibration after battle
+        # @param players_creatures [Array<PFM::PokemonBattler>]
+        def handle_form_recalibration(players_creatures)
+          players_creatures.each(&:undynamax)
+          players_creatures.each { |pokemon| pokemon.terastallized = false }
+          super
+        end
+      end
+      prepend ZTeraMaxPlugin
     end
   end
 end

@@ -59,7 +59,7 @@ module PFM
         return unless @dynamaxed
 
         reset_to_original_moveset
-        @hp = (@hp / (1.5 + 0.05 * @dynamax_level.to_i)).ceil.clamp(0, max_hp)
+        @hp = (@hp / (1.5 + 0.05 * @dynamax_level.to_i)).floor.clamp(0, max_hp)
         @dynamaxed = false
 
         return unless @gigantamaxed
