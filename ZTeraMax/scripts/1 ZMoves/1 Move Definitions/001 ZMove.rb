@@ -18,5 +18,6 @@ module Battle
         return true
       end
     end
+    Move.register(:s_z_move, ZMove)
   end
 end
