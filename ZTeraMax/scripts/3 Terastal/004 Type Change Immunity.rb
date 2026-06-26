@@ -29,7 +29,7 @@ module Battle
       prepend ZTeraMaxPlugin
     end
 
-    class BurnUp < Basic
+    class BurnUp < BasicWithSuccessfulEffect
       module ZTeraMaxPlugin
         # Function that deals the effect to the pokemon
         # @param user [PFM::PokemonBattler] user of the move
