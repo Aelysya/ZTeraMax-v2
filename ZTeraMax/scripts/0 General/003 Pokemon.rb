@@ -39,7 +39,7 @@ module PFM
         return handle_fixed_tera_type(opts) if FIXED_TERA_TYPE_SPECIES.include?(db_symbol)
 
         return @tera_type = data_type(opts[:tera_type]).id if opts[:tera_type]
-        return @tera_type = rand(1..each_data_type.size) if rand(100) < Configs.z_tera_max.exotic_tera_type_chance # 10% by default
+        return @tera_type = rand(1...each_data_type.size) if rand(100) < Configs.z_tera_max.exotic_tera_type_chance # 10% by default
         return @tera_type = type1 if type2 == 0
 
         @tera_type = [type1, type2].sample
