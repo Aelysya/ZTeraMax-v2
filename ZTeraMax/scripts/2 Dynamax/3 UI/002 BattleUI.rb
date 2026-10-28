@@ -4,7 +4,7 @@ module BattleUI
       # Pokemon sprite zoom
       # @return [Integer]
       def sprite_zoom
-        return 2 if @pokemon.dynamaxed
+        return 2 if @pokemon&.dynamaxed
 
         super
       end
@@ -12,7 +12,7 @@ module BattleUI
       # Update the sprite
       def update
         super
-        shader.set_float_uniform('color', [0.84, 0.07, 0.33, 0.5]) if @pokemon.dynamaxed
+        shader.set_float_uniform('color', [0.84, 0.07, 0.33, 0.5]) if @pokemon&.dynamaxed
       end
 
       # Creates the deflating animation after dynamax expires

@@ -85,13 +85,14 @@ If you **DID NOT ADD** any new types to your project:
 
 - Paste the `stellar.json` file in the `Data/Studio/types` folder
 - Paste the files named `types.png`, `types_fr.png`, `types_en.png` and `types_es.png` in the `graphics/interface` folder, when prompted about it, choose to replace all the files
+- Paste the files named `types_pokedex.png`, `types_fr_pokedex.png`, `types_en_pokedex.png` and `types_es_pokedex.png` in the `graphics/pokedex` folder. Remove the existing files that are named `types.png`, `types_fr.png`, `types_en.png` and `types_es.png`, then rename the files you've copied to remove the `_pokedex` suffix from all of them
 - Paste the `types_BATTLE.png` file in the `graphics/interface/battle` folder, delete the file named `types.png` in the folder and rename the file you copied to remove the `_BATTLE` part
 - Paste the `100003.csv` file in the `Data/Text/Dialogs` folder, when prompted about it, choose to replace the file
 
 If you **DID ADD** new types to your project, open a text editor, you'll need it to modify some of the files:
 
 - In the `Data/Studio/types` folder, open the file of the last type you added to your project. If youre unsure, try looking for the file that has the highest `id` value. Once you found it, open the `stellar.json` file and change its `id` to be 1 more than the number you found
-- For the files named `types.png`, `types_fr.png`, `types_en.png` and `types_es.png`, since you already added new types to your project you should know how to handle the case of the new Stellar type, just edit your existing resources to add the Stellar sprites
+- For the files named `types.png`, `types_fr.png`, `types_en.png`, `types_es.png`, `types_pokedex.png`, `types_fr_pokedex.png`, `types_en_pokedex.png` and `types_es_pokedex.png`, since you already added new types to your project you should know how to handle the case of the new Stellar type, just edit your existing resources to add the Stellar sprites. Don't forget to rename the pokedex ressources after copying them to remove the `_pokedex` suffix from all of them
 - For the `types_BATTLE.png` file, same idea as the previous instruction, it just refers to the `types.png` file located in the `graphics/interface/battle` folder, don't forget to rename it to `types.png` once you copied it
 - A new file named `tera_types.png` has been added in the `graphics/interface/battle` folder, you will have to edit it to add your custom types icons. If you don't have the sprites yet, just leave blank spaces of 16 pixels for each of your types between the Fairy and Stellar types
 - In the `Data/Text/Dialogs` folder, open the `100003.csv`. Open the same file from the plugin and paste the line containing Stellar texts at the end of your file
