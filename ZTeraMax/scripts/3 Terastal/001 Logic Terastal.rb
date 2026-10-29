@@ -78,9 +78,8 @@ module Battle
     class EndTurnHandler
       module ZTeraMaxPlugin
         def process_events
-          super
           process_untera_end_turn_event
-          @logic.delete_dead_effects
+          super
         end
 
         private
