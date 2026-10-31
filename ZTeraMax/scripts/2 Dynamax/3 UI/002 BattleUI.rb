@@ -1,6 +1,10 @@
 module BattleUI
   class PokemonSprite < ShaderedSprite
     module ZTeraMaxPlugin
+      DYNAMAX_COLOR = [0.84, 0.07, 0.33, 0.5]
+      CALYREX_COLOR = [0.07, 0.33, 0.84, 0.5]
+
+
       # Pokemon sprite zoom
       # @return [Integer]
       def sprite_zoom
@@ -12,7 +16,10 @@ module BattleUI
       # Update the sprite
       def update
         super
-        shader.set_float_uniform('color', [0.84, 0.07, 0.33, 0.5]) if @pokemon&.dynamaxed
+        return unless @pokemon&.dynamaxed
+        return shader.set_float_uniform('color', DYNAMAX_COLOR) unless @pokemon&.db_symbol == :calyrex
+
+        shader.set_float_uniform('color', CALYREX_COLOR)
       end
 
       # Creates the deflating animation after dynamax expires
@@ -22,7 +29,9 @@ module BattleUI
         size_animation = Yuki::Animation::ScalarAnimation.new(1, self, :zoom=, 2, 1)
 
         color_updater = proc do |alpha|
-          shader.set_float_uniform('color', [0.84, 0.07, 0.33] + [alpha])
+          next shader.set_float_uniform('color', DYNAMAX_COLOR[0..2] + [alpha]) unless @pokemon&.db_symbol == :calyrex
+
+          next shader.set_float_uniform('color', CALYREX_COLOR[0..2] + [alpha])
         end
 
         color_animation = Yuki::Animation::ScalarAnimation.new(1, color_updater, :call, 0.5, 0)
